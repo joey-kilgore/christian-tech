@@ -81,6 +81,8 @@ def main():
 
     fig.update_traces(textposition='outside')  # Puts count labels above bars
     fig.update_layout(yaxis_title="Count", xaxis_title="Survey Response")  # Optional dark theme
+
+    os.makedirs("./source/_static", exist_ok=True)
     fig.write_html("./source/_static/survey_results.html")
 
 
