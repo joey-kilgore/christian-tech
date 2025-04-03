@@ -10,7 +10,7 @@ Welcome to christian-tech
    :maxdepth: 2
    :caption: Contents:
 
-   sample
+   Prayer Apps
 
 Indices and tables
 ==================
