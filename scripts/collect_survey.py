@@ -5,9 +5,24 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 import argparse
+import pandas as pd
+import plotly.express as px
 
 # If modifying these scopes, delete the file token.json.
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets.readonly"]
+
+def process_data(values):
+  """Take the 2d array of data from cells in the google sheet and transform
+  it into a pandas dataframe"""
+  # Convert the data to a Pandas DataFrame
+  df = pd.DataFrame(values[1:], columns=values[0])
+  df_bible_app = df['Bible_app'].str.upper().str.get_dummies(sep=', ')
+
+  
+  # Print the DataFrame
+  print(df)
+  print(df_bible_app)
+  return (df, df_bible_app)
 
 def main():
   """Shows basic usage of the Sheets API.
@@ -18,7 +33,7 @@ def main():
   parser.add_argument("--SPREADSHEET_ID", type=str, help="spreadsheet id (get from sheet URL)")
   args = parser.parse_args()
   SAMPLE_SPREADSHEET_ID = args.SPREADSHEET_ID
-  SAMPLE_RANGE_NAME = "Sheet1!A2:E"
+  SAMPLE_RANGE_NAME = "Sheet1!A:ZZ" # grab the entire sheet
   creds = None
   # The file token.json stores the user's access and refresh tokens, and is
   # created automatically when the authorization flow completes for the first
@@ -48,19 +63,29 @@ def main():
         .get(spreadsheetId=SAMPLE_SPREADSHEET_ID, range=SAMPLE_RANGE_NAME)
         .execute()
     )
+
     values = result.get("values", [])
 
     if not values:
       print("No data found.")
       return
 
-    print("Name, Major:")
-    for row in values:
-      # Print columns A and E, which correspond to indices 0 and 4.
-      print(f"{row[0]}, {row[4]}")
+    (df, df_bible_app) = process_data(values)
+
+    response_counts = df_bible_app.sum().reset_index()
+    response_counts.columns = ['Answer', 'Count']
+    fig = px.bar(response_counts, x='Answer', y='Count',
+             text='Count', title="Advanced Bible Study Software",
+             labels={'Answer': 'Response', 'Count': 'Number of Selections'},
+             hover_name='Answer')
+
+    fig.update_traces(textposition='outside')  # Puts count labels above bars
+    fig.update_layout(yaxis_title="Count", xaxis_title="Survey Response")  # Optional dark theme
+    fig.write_html("./source/_static/survey_results.html")
+
+
   except HttpError as err:
     print(err)
-
 
 if __name__ == "__main__":
   main()
