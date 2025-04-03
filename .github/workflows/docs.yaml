@@ -25,7 +25,12 @@ jobs:
       run: |
         python3 -m pip install --upgrade pip
         pip install -r requirements.txt
-
+    - name: Write Google Drive API key to file
+      run: |
+        echo ${{ secrets.JSON_SECRET }} > token.json
+    - name: Collect survey data
+      run: |
+        python3 ./scripts/collect_survey.py --SPREADSHEET_ID ${{ secrets.SPREADSHEET_ID }}
     - name: Build HTML
       run: |
         make html
