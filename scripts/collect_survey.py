@@ -7,22 +7,66 @@ from googleapiclient.errors import HttpError
 import argparse
 import pandas as pd
 import plotly.express as px
+import re
 
 # If modifying these scopes, delete the file token.json.
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets.readonly"]
+
+SELECT_ONE = ["Generation","Denomination","Tech Statement","Tech impact on Church","Tech impact on me"]
+SELECT_ALL = ["Church Involvement","Church Engagement","Daily Tech","Devices","When Digital Bibles","Why Digital Bibles","Bible Software","Web Bibles","Mobile Apps","Prayer Apps","Note Apps","Memory Apps"]
+SHORT_ANS = ["timestamp","Other Denomination","Other Mobile Apps","Other Prayer Apps","Other Note Apps","Other Memory Apps","Other Tools","Impact"]
 
 def process_data(values):
   """Take the 2d array of data from cells in the google sheet and transform
   it into a pandas dataframe"""
   # Convert the data to a Pandas DataFrame
-  df = pd.DataFrame(values[1:], columns=values[0])
-  df_bible_app = df['Bible_app'].str.upper().str.get_dummies(sep=', ')
+  columns = ["timestamp","Generation","Denomination","Other Denomination","Church Involvement","Church Engagement","Daily Tech","Tech Statement","Tech impact on Church","Tech impact on me","Devices","When Digital Bibles","Why Digital Bibles","Bible Software","Web Bibles","Mobile Apps","Other Mobile Apps","Prayer Apps","Other Prayer Apps","Note Apps","Other Note Apps","Memory Apps","Other Memory Apps","Other Tools","Impact"]
+  df = pd.DataFrame(values[1:], columns=columns)
 
-  
   # Print the DataFrame
+  print("LOADED DATA")
   print(df)
-  print(df_bible_app)
-  return (df, df_bible_app)
+  return df
+
+def bar_graph_generator(df, col, title):
+  print(f"GENERATING GRAPH: {title}")
+  df_col = df[col].str.get_dummies(sep=', ') # google forms appends multiple checkbox answers with a , and a space
+  response_counts = df_col.sum().reset_index()
+  response_counts.columns = ['Answer', 'Count']
+  response_counts['Answer'] = response_counts['Answer'].astype(str).apply(lambda x: re.sub(r"\(.*?\)", "", x))
+  fig = px.bar(response_counts, x='Answer', y='Count',
+            text='Count', title=title,
+            labels={'Answer': 'Response', 'Count': 'Number of Selections'},
+            hover_name='Answer')
+
+  fig.update_traces(textposition='outside')  # Puts count labels above bars
+  fig.update_layout(yaxis_title="Count", xaxis_title="Survey Response")  # Optional dark theme
+
+  os.makedirs("./source/_static", exist_ok=True)
+  filename= col.replace(' ','_') + '.html'
+  fig.write_html(f"./source/_static/{filename}")
+
+def pie_chart_generator(df, col, title):
+  print(f"GENERATING GRAPH: {title}")
+  # Count each category
+  value_counts = df[col].value_counts().reset_index()
+  value_counts.columns = ['Answer', 'count']
+
+  # Compute percentage
+  value_counts['percent'] = 100 * value_counts['count'] / value_counts['count'].sum()
+
+  # Create pie chart with extra hover info
+  fig = px.pie(
+      value_counts,
+      names='Answer',
+      values='count',
+      title=title,
+      hover_data={'count': True, 'percent': ':.2f'}
+  )
+
+  os.makedirs("./source/_static", exist_ok=True)
+  filename= col.replace(' ','_') + '.html'
+  fig.write_html(f"./source/_static/{filename}")
 
 def main():
   """Shows basic usage of the Sheets API.
@@ -33,7 +77,7 @@ def main():
   parser.add_argument("--SPREADSHEET_ID", type=str, help="spreadsheet id (get from sheet URL)")
   args = parser.parse_args()
   SAMPLE_SPREADSHEET_ID = args.SPREADSHEET_ID
-  SAMPLE_RANGE_NAME = "Sheet1!A:ZZ" # grab the entire sheet
+  SAMPLE_RANGE_NAME = "Responses!A:Y" # grab the entire sheet
   creds = None
   # The file token.json stores the user's access and refresh tokens, and is
   # created automatically when the authorization flow completes for the first
@@ -70,21 +114,13 @@ def main():
       print("No data found.")
       return
 
-    (df, df_bible_app) = process_data(values)
+    df = process_data(values)
 
-    response_counts = df_bible_app.sum().reset_index()
-    response_counts.columns = ['Answer', 'Count']
-    fig = px.bar(response_counts, x='Answer', y='Count',
-             text='Count', title="Advanced Bible Study Software",
-             labels={'Answer': 'Response', 'Count': 'Number of Selections'},
-             hover_name='Answer')
+    for col in SELECT_ALL:
+      bar_graph_generator(df, col, col)
 
-    fig.update_traces(textposition='outside')  # Puts count labels above bars
-    fig.update_layout(yaxis_title="Count", xaxis_title="Survey Response")  # Optional dark theme
-
-    os.makedirs("./source/_static", exist_ok=True)
-    fig.write_html("./source/_static/survey_results.html")
-
+    for col in SELECT_ONE:
+      pie_chart_generator(df, col, col)
 
   except HttpError as err:
     print(err)
