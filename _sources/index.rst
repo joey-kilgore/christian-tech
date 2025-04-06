@@ -12,7 +12,7 @@ that have been made to enrich Christian's walk with Christ with technology.
 If you have suggestions for more apps that I have missed, or you would like to
 contribute to this project, please checkout the `github page <https://github.com/joey-kilgore/christian-tech>`_
 
-Addtiionally, to give the body an understanding of how we use technology as a whole,
+Additionally, to give the body an understanding of how we use technology as a whole,
 incorporated in this website is the aggregation of data from a google survey.
 I hope that this gives us a chance to understand how our brothers and sisters in Christ
 use technology (and maybe find more ways for us to enrich our walk). 
