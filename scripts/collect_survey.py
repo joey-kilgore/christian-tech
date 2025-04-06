@@ -34,14 +34,15 @@ def bar_graph_generator(df, col, title):
   response_counts = df_col.sum().reset_index()
   response_counts.columns = ['Answer', 'Count']
   response_counts['Answer'] = response_counts['Answer'].astype(str).apply(lambda x: re.sub(r"\(.*?\)", "", x))
-  fig = px.bar(response_counts, x='Answer', y='Count',
+  response_counts = response_counts.sort_values(by='Count', ascending=True)
+  response_counts['Answer'] = response_counts['Answer'].astype("category")
+  response_counts['Answer'] = response_counts['Answer'].cat.set_categories(response_counts['Answer'])
+  
+  fig = px.bar(response_counts, x='Count', y='Answer',
             text='Count', title=title,
-            labels={'Answer': 'Response', 'Count': 'Number of Selections'},
-            hover_name='Answer')
-
-  fig.update_traces(textposition='outside')  # Puts count labels above bars
-  fig.update_layout(yaxis_title="Count", xaxis_title="Survey Response")  # Optional dark theme
-
+            hover_name='Answer',
+            orientation='h')
+  fig.update_yaxes(type='category')
   os.makedirs("./source/_static", exist_ok=True)
   filename= col.replace(' ','_') + '.html'
   fig.write_html(f"./source/_static/{filename}")
