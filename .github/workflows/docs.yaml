@@ -31,6 +31,9 @@ jobs:
     - name: Collect survey data
       run: |
         python3 ./scripts/collect_survey.py --SPREADSHEET_ID ${{ secrets.SPREADSHEET_ID }}
+    - name: Collect links data
+      run: |
+        python3 ./scripts/collect_links.py --SPREADSHEET_ID ${{ secrets.SPREADSHEET_ID }}
     - name: Build HTML
       run: |
         make html
