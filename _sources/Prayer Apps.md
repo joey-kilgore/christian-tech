@@ -1,4 +1,4 @@
-# Prayer Apps
+# Prayer Apps Reviewed
 
 Recommended
 - [PrayerMate](./prayer_apps/PrayerMate.md)
