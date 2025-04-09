@@ -67,6 +67,11 @@ iOS: https://apps.apple.com/us/app/the-daily-office/id1513851259
 Android: https://play.google.com/store/apps/details?id=com.dailyoffice2019.app&hl=en_US  
 Web: https://www.dailyoffice2019.com/  
 Description: 2019 Book of Common Prayer used by permission of the Anglican Church in North America.  
+## Lectio 365
+Website: https://www.24-7prayer.com/resource/lectio-365/  
+iOS: https://apps.apple.com/us/app/lectio-365/id1483974820  
+Android: https://play.google.com/store/apps/details?id=com.prayer247.lectio365&gl=GB&pli=1  
+Description: Lectio 365 is a free daily devotional app that helps you pray the Bible every day.  
 # Bible Memory
 ## Bible Memory App
 Website: https://biblememory.com/  
