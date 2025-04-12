@@ -10,7 +10,7 @@ on:
     branches:
       - main
   schedule:
-    - cron: "48 3 * * *"
+    - cron: "48 3 * * 0"
 
 jobs:
   build:
