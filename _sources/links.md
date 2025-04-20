@@ -18,6 +18,12 @@ iOS: https://apps.apple.com/us/app/bible-app-read-study-daily/id332615624?referr
 Android: https://play.google.com/store/apps/details?id=biblereader.olivetree&feature=search_result#?t=W251bGwsMSwxLDEsImJpYmxlcmVhZGVyLm9saXZldHJlZSJd  
 Desktop: https://www.olivetree.com/  
 Description: Olive Tree Bible App works seamlessly across your Mac, PC, iPad, iPhone, and Android phone. iOS. Android. Mac. Windows.  
+## e-Sword
+Website: https://www.e-sword.net/  
+iOS: https://www.e-sword.net/iphone/  
+Android: https://www.e-sword.net/android/  
+Desktop: https://www.e-sword.net/downloads.html  
+Description: e-Sword is a fast and effective way to study the Bible.  
 # Bible
 ## Bible Gateway
 Website: https://www.biblegateway.com/  
@@ -49,6 +55,12 @@ iOS: https://apps.apple.com/us/app/parallel-plus-bible-study-app/id528246186
 Android: https://play.google.com/store/apps/details?id=org.biblegt.android&hl=en_US  
 Web: https://thebible.org/gt/index  
 Description: The PARALLEL PLUS® Bible-study app is for pastors, lay leaders, and others actively seeking a deeper understanding of the Scriptures.  
+## ESV Bible
+Website: https://www.esv.org/  
+iOS: https://apps.apple.com/us/app/esv-bible/id361797273  
+Android: https://play.google.com/store/apps/details?id=com.subsplash.esv&gl=US  
+Web: https://www.esv.org/Matthew+1/  
+Description: Read the Bible Online.  
 # Prayer
 ## PrayerMate
 Website: https://www.prayermate.net/app  
